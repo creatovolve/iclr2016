@@ -12,7 +12,7 @@ class lstm_model_sentiment(object):
         if params.traintype == "normal":
             l2 = 0.5*params.LC*sum(lasagne.regularization.l2(x) for x in self.network_params)
             if params.updatewords:
-                return l2 + 0.5*params.LW*lasagne.regularization.l2(We-initial_We)
+                return l2 
             else:
                 return l2
         elif params.traintype == "reg":
@@ -24,7 +24,7 @@ class lstm_model_sentiment(object):
                 idx += 1
             tmp = lasagne.layers.get_all_params(l_softmax, trainable=True)
             l2 += 0.5*params.LC*sum(lasagne.regularization.l2(x) for x in tmp)
-            return l2 + 0.5*params.LRW*lasagne.regularization.l2(We-initial_We)
+            return l2 
         elif params.traintype == "rep":
             tmp = lasagne.layers.get_all_params(l_softmax, trainable=True)
             l2 = 0.5*params.LC*sum(lasagne.regularization.l2(x) for x in tmp)
@@ -141,7 +141,6 @@ class lstm_model_sentiment(object):
         prediction = T.argmax(X, axis=1)
 
         self.network_params = lasagne.layers.get_all_params(l_out, trainable=True) + lasagne.layers.get_all_params(l_softmax, trainable=True)
-        self.network_params.pop(0)
         self.all_params = lasagne.layers.get_all_params(l_out, trainable=True) + lasagne.layers.get_all_params(l_softmax, trainable=True)
 
         reg = self.getRegTerm(params, We, initial_We, l_out, l_softmax, p)
